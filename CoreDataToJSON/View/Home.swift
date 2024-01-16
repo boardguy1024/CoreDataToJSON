@@ -16,6 +16,7 @@ struct Home: View {
     @Environment(\.managedObjectContext) private var context
     @State private var presentShareSheet = false
     @State private var shareURL: URL = URL(string: "https://apple.com")!
+    @State private var presentFilePicker = false
 
     var body: some View {
         
@@ -46,7 +47,7 @@ struct Home: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         Button("Import") {
-                            
+                            presentFilePicker.toggle()
                         }
                         
                         Button("Export", action: exportCoreData)
@@ -72,9 +73,51 @@ struct Home: View {
                     .presentationDragIndicator(.hidden) // つまみの表示・非表示
                     .interactiveDismissDisabled() // おろしてdimissを無効にする
             })
-            .sheet(isPresented: $presentShareSheet, content: {
+            .sheet(isPresented: $presentShareSheet,
+                   onDismiss: {
+                deleteTempFile()
+            }, content: {
                 CustomShareSheet(url: $shareURL)
+                
             })
+            .fileImporter(isPresented: $presentFilePicker, allowedContentTypes: [.json]) { result in
+                switch result {
+                case .success(let url):
+                    importJSON(url)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func importJSON(_ url: URL) {
+        do {
+            let jsonData = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            
+            // CoreDataのNSManagedObjectを 生成する際には contextが必要で
+            // Purchaseの init(decode: ) で 使用中のcontextを渡す必要がある。
+            decoder.userInfo[.context] = context
+            // ↑は下と同じ処理
+            // decoder.userInfo[.init(rawValue: "managedObjectContext")!] = context
+            let _ = try decoder.decode([Purchase].self, from: jsonData)
+            
+            try context.save()
+            print("File Imported Successfully")
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
+    func deleteTempFile() {
+        // dismissした場合、jsonDataが保存された pathURLでjsonデータを削除する
+        // 削除しないと 指定pathにどんどん貯まるため
+        do {
+            try FileManager.default.removeItem(at: shareURL)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
@@ -88,9 +131,9 @@ struct Home: View {
                 
                 if let jsonStr = String(data: jsonData, encoding: .utf8) {
                     // .userDomainMask: 現在の使用ユーザーのホームディレクトリ (~/)
-                    if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                    if let tempUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                         // .complete: 日付の完全な形式（年、月、日）
-                        let pathURL = url.appending(component: "Export_\(Date().formatted(date: .complete, time: .omitted)).json")
+                        let pathURL = tempUrl.appending(component: "Export_\(Date().formatted(date: .complete, time: .omitted)).json")
                         
                         try jsonStr.write(to: pathURL, atomically: true, encoding: .utf8)
                         
