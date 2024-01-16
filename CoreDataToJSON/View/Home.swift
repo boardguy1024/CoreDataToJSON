@@ -6,11 +6,17 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct Home: View {
     
     @State private var addExpense = false
     @FetchRequest(entity: Purchase.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Purchase.dateOfPurchase, ascending: false)], animation: .easeInOut(duration: 0.3)) private var purchaseItems: FetchedResults<Purchase>
+    
+    @Environment(\.managedObjectContext) private var context
+    @State private var presentShareSheet = false
+    @State private var shareURL: URL = URL(string: "https://apple.com")!
+
     var body: some View {
         
         NavigationStack {
@@ -36,6 +42,20 @@ struct Home: View {
             .listStyle(.insetGrouped)
             .navigationTitle("My Expenses")
             .toolbar {
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Menu {
+                        Button("Import") {
+                            
+                        }
+                        
+                        Button("Export", action: exportCoreData)
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .rotationEffect(.init(degrees: -90))
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         addExpense.toggle()
@@ -52,6 +72,36 @@ struct Home: View {
                     .presentationDragIndicator(.hidden) // つまみの表示・非表示
                     .interactiveDismissDisabled() // おろしてdimissを無効にする
             })
+            .sheet(isPresented: $presentShareSheet, content: {
+                CustomShareSheet(url: $shareURL)
+            })
+        }
+    }
+    
+    func exportCoreData() {
+        do {
+            if let entityName = Purchase.entity().name {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+                let items = try context.fetch(request).compactMap { $0 as? Purchase }
+                
+                let jsonData = try JSONEncoder().encode(items)
+                
+                if let jsonStr = String(data: jsonData, encoding: .utf8) {
+                    // .userDomainMask: 現在の使用ユーザーのホームディレクトリ (~/)
+                    if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                        // .complete: 日付の完全な形式（年、月、日）
+                        let pathURL = url.appending(component: "Export_\(Date().formatted(date: .complete, time: .omitted)).json")
+                        
+                        try jsonStr.write(to: pathURL, atomically: true, encoding: .utf8)
+                        
+                        // Saved Successfully
+                        shareURL = pathURL
+                        presentShareSheet.toggle()
+                    }
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }

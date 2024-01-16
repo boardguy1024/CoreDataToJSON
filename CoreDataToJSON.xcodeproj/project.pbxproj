@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D6BA4E82B56404000A8B816 /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6BA4E72B56404000A8B816 /* Purchase.swift */; };
+		2D6BA4EB2B565C2C00A8B816 /* Purchase+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6BA4E92B565C2C00A8B816 /* Purchase+CoreDataClass.swift */; };
+		2D6BA4EE2B56688900A8B816 /* CustomShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6BA4ED2B56688900A8B816 /* CustomShareSheet.swift */; };
 		2DE0AF2F2B5405C000E07DF9 /* CoreDataToJSONApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0AF2E2B5405C000E07DF9 /* CoreDataToJSONApp.swift */; };
 		2DE0AF312B5405C000E07DF9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0AF302B5405C000E07DF9 /* ContentView.swift */; };
 		2DE0AF332B5405C000E07DF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DE0AF322B5405C000E07DF9 /* Assets.xcassets */; };
@@ -19,7 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2D6BA4E72B56404000A8B816 /* Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
+		2D6BA4E92B565C2C00A8B816 /* Purchase+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2D6BA4ED2B56688900A8B816 /* CustomShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShareSheet.swift; sourceTree = "<group>"; };
 		2DE0AF2B2B5405C000E07DF9 /* CoreDataToJSON.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataToJSON.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DE0AF2E2B5405C000E07DF9 /* CoreDataToJSONApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataToJSONApp.swift; sourceTree = "<group>"; };
 		2DE0AF302B5405C000E07DF9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,7 +47,8 @@
 		2D6BA4E62B56402D00A8B816 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				2D6BA4E72B56404000A8B816 /* Purchase.swift */,
+				2DE0AF3E2B5407F300E07DF9 /* CoreDataToJSON.xcdatamodeld */,
+				2D6BA4E92B565C2C00A8B816 /* Purchase+CoreDataClass.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -73,7 +76,6 @@
 				2DE0AF2E2B5405C000E07DF9 /* CoreDataToJSONApp.swift */,
 				2DE0AF302B5405C000E07DF9 /* ContentView.swift */,
 				2DE0AF3C2B54065200E07DF9 /* Persistance.swift */,
-				2DE0AF3E2B5407F300E07DF9 /* CoreDataToJSON.xcdatamodeld */,
 				2D6BA4E62B56402D00A8B816 /* Entity */,
 				2DE0AF322B5405C000E07DF9 /* Assets.xcassets */,
 				2DE0AF342B5405C000E07DF9 /* Preview Content */,
@@ -94,6 +96,7 @@
 			children = (
 				2DE0AF422B54089200E07DF9 /* Home.swift */,
 				2DE0AF442B54097D00E07DF9 /* AddNewExpense.swift */,
+				2D6BA4ED2B56688900A8B816 /* CustomShareSheet.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -168,13 +171,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D6BA4EE2B56688900A8B816 /* CustomShareSheet.swift in Sources */,
 				2DE0AF312B5405C000E07DF9 /* ContentView.swift in Sources */,
 				2DE0AF2F2B5405C000E07DF9 /* CoreDataToJSONApp.swift in Sources */,
 				2DE0AF432B54089200E07DF9 /* Home.swift in Sources */,
 				2DE0AF452B54097D00E07DF9 /* AddNewExpense.swift in Sources */,
 				2DE0AF3D2B54065200E07DF9 /* Persistance.swift in Sources */,
 				2DE0AF402B5407F300E07DF9 /* CoreDataToJSON.xcdatamodeld in Sources */,
-				2D6BA4E82B56404000A8B816 /* Purchase.swift in Sources */,
+				2D6BA4EB2B565C2C00A8B816 /* Purchase+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
